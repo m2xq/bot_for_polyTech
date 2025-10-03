@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  bot:
+    build: ./bot
+    container_name: telegram_bot
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - lab_files:/app/lab_files  # Добавляем volume для файлов
+
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: bot_user
+      POSTGRES_PASSWORD: bot_pass
+      POSTGRES_DB: bot_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+  lab_files:  # Добавляем volume для хранения файлов
