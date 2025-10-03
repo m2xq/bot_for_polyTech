@@ -184,6 +184,12 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
     elif data.startswith("edit_subject:"):
         await edit_subject_start(query, context)
+        
+    elif data == "back_to_subjects":  # Добавьте эту строку
+        await handle_back_buttons(query, context)
+            
+    elif data == "back_to_admin":     # И эту тоже для consistency
+        await handle_back_buttons(query, context)
 
     elif data == "add_subject":
         await add_subject_start(update, context)
@@ -212,11 +218,11 @@ async def show_subject_details(query, context):
         tg_id = query.from_user.id
         user = session.query(User).filter_by(tg_id=tg_id).first()
         
-        if user and user.is_admin:
-            keyboard.append([
-                InlineKeyboardButton("✏️ Редактировать", callback_data=f"edit_subject:{subject.id}"),
-                InlineKeyboardButton("🗑️ Удалить", callback_data=f"delete_subject:{subject.id}")
-            ])
+        # if user and user.is_admin:
+        #     keyboard.append([
+        #         InlineKeyboardButton("✏️ Редактировать", callback_data=f"edit_subject:{subject.id}"),
+        #         InlineKeyboardButton("🗑️ Удалить", callback_data=f"delete_subject:{subject.id}")
+        #     ])
         
         keyboard.append([InlineKeyboardButton("⬅️ Назад к предметам", callback_data="back_to_subjects")])
         
@@ -252,11 +258,11 @@ async def show_lab_details(query, context):
         tg_id = query.from_user.id
         user = session.query(User).filter_by(tg_id=tg_id).first()
         
-        if user and user.is_admin:
-            keyboard.extend([
-                [InlineKeyboardButton("✏️ Редактировать", callback_data=f"edit_lab:{lab.id}")],
-                [InlineKeyboardButton("🗑️ Удалить", callback_data=f"delete_lab:{lab.id}")]
-            ])
+        # if user and user.is_admin:
+        #     keyboard.extend([
+        #         [InlineKeyboardButton("✏️ Редактировать", callback_data=f"edit_lab:{lab.id}")],
+        #         [InlineKeyboardButton("🗑️ Удалить", callback_data=f"delete_lab:{lab.id}")]
+        #     ])
         
         keyboard.extend([
             [InlineKeyboardButton("📎 Файлы лабораторной", callback_data=f"lab_files:{lab.id}")],
